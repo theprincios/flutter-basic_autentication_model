@@ -3,11 +3,8 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:project_model/core/networking_service/api/portici_api/authentiation/portici_authentication_provider.dart';
 import 'package:project_model/core/networking_service/api/portici_api/provider/api_service.dart';
-import 'package:project_model/core/storage/secure_storage_sevice.dart';
 
 class PorticiApiInterceptors extends Interceptor {
-  final SecureStorageService secureStorageService = SecureStorageService();
-
   @override
   FutureOr<dynamic> onRequest(
       // ignore: avoid_renaming_method_parameters
@@ -41,19 +38,11 @@ class PorticiApiInterceptors extends Interceptor {
     log('ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}');
 
     if (err.response?.statusCode == 403 || err.response?.statusCode == 401) {
-      if (err.requestOptions.headers['Authorization'] != null) {
-        final bool refreshTokenIsUpdate = await PorticiAutenticationProvider
-            .porticiAuthenticationProvider
-            .refreshToken();
-        if (refreshTokenIsUpdate) {
-          return await _retryRequest(err.requestOptions);
-        } else {
-          PorticiAutenticationProvider.porticiAuthenticationProvider.setAuth =
-              false;
-        }
-      } else {
-        PorticiAutenticationProvider.porticiAuthenticationProvider.setAuth =
-            false;
+      final bool refreshTokenIsUpdate = await PorticiAutenticationProvider
+          .porticiAuthenticationProvider
+          .refreshToken();
+      if (refreshTokenIsUpdate) {
+        return await _retryRequest(err.requestOptions);
       }
     }
 
