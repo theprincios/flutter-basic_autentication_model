@@ -8,7 +8,7 @@ class PorticiAutenticationProvider extends ChangeNotifier {
       PorticiAuthenticationService();
   final SecureStorageService _secureStorage = SecureStorageService();
 
-  static PorticiAutenticationProvider porticiAuthenticationProvider =
+  static final PorticiAutenticationProvider porticiAuthenticationProvider =
       PorticiAutenticationProvider();
 
   bool _isLogged = true;
