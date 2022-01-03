@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: MyProviders().getProviders,
+      providers: MyProviders.getProviders,
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: 'MY_APP',

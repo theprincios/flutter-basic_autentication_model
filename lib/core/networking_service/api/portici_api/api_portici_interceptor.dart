@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:dio/dio.dart';
-import 'package:project_model/core/providers/providers.dart';
-import 'package:project_model/core/storage/secure_storage_configurations.dart';
+import 'package:project_model/core/networking_service/api/portici_api/authentiation/portici_authentication_provider.dart';
+import 'package:project_model/core/networking_service/api/portici_api/provider/api_service.dart';
 import 'package:project_model/core/storage/secure_storage_sevice.dart';
 
 class PorticiApiInterceptors extends Interceptor {
@@ -15,20 +15,12 @@ class PorticiApiInterceptors extends Interceptor {
       RequestInterceptorHandler handler) async {
     log('REQUEST[${request.method}] => PATH: ${request.path}');
 
-    final String accessToken = porticiAuthProvider.getAccessToken;
+    final String? accessToken = await PorticiAutenticationProvider
+        .porticiAuthenticationProvider.getAccessToken;
 
-    if (accessToken == '') {
-      final accessToken = await secureStorageService
-          .getTokenByKey(SecureStorageKeys.DATABASE_KEY_ACCESSTOKEN);
-
-      if (accessToken != null) {
-        porticiAuthProvider.setAccessToken = accessToken;
-        request.headers['Authorization'] = 'Bearer $accessToken';
-      }
-    } else {
+    if (accessToken != null) {
       request.headers['Authorization'] = 'Bearer $accessToken';
     }
-
 
     log('HEADERS : ${request.headers}');
 
@@ -49,17 +41,19 @@ class PorticiApiInterceptors extends Interceptor {
     log('ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}');
 
     if (err.response?.statusCode == 403 || err.response?.statusCode == 401) {
-      if (err.requestOptions.headers['Authorization'] == '' ||
-          err.requestOptions.headers['Authorization'] == null) {
-        porticiAuthProvider.setAuth = false;
-      } else {
-        final bool refreshTokenIsUpdate =
-            await porticiAuthProvider.refreshToken();
+      if (err.requestOptions.headers['Authorization'] != null) {
+        final bool refreshTokenIsUpdate = await PorticiAutenticationProvider
+            .porticiAuthenticationProvider
+            .refreshToken();
         if (refreshTokenIsUpdate) {
           return await _retryRequest(err.requestOptions);
         } else {
-          porticiAuthProvider.setAuth = false;
+          PorticiAutenticationProvider.porticiAuthenticationProvider.setAuth =
+              false;
         }
+      } else {
+        PorticiAutenticationProvider.porticiAuthenticationProvider.setAuth =
+            false;
       }
     }
 
@@ -71,7 +65,8 @@ class PorticiApiInterceptors extends Interceptor {
       method: requestOptions.method,
       headers: requestOptions.headers,
     );
-    return apiServiceProvider.getApiPortici.dio.request<dynamic>(
+    return ApiServiceProvider.apiServiceProvider.getApiPortici.dio
+        .request<dynamic>(
       requestOptions.path,
       data: requestOptions.data,
       queryParameters: requestOptions.queryParameters,

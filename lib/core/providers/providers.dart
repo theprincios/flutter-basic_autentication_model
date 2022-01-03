@@ -5,12 +5,8 @@ import 'package:project_model/core/routing/provider/navigation_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
-PorticiAutenticationProvider porticiAuthProvider =
-    PorticiAutenticationProvider();
-ApiServiceProvider apiServiceProvider = ApiServiceProvider();
-
 class MyProviders {
-  final List<SingleChildWidget> _providers = [
+  static final List<SingleChildWidget> _providers = [
     ListenableProvider<NavigatorProvider>(
       create: (context) => NavigatorProvider(),
       dispose: (context, provider) => provider.dispose(),
@@ -20,14 +16,15 @@ class MyProviders {
       dispose: (context, provider) => provider.dispose(),
     ),
     ListenableProvider<PorticiAutenticationProvider>(
-      create: (context) => porticiAuthProvider,
+      create: (context) =>
+          PorticiAutenticationProvider.porticiAuthenticationProvider,
       dispose: (context, provider) => provider.dispose(),
     ),
     Provider<ApiServiceProvider>(
-      create: (context) => apiServiceProvider,
+      create: (context) => ApiServiceProvider.apiServiceProvider,
       dispose: (context, apiService) {},
     ),
   ];
 
-  List<SingleChildWidget> get getProviders => _providers;
+  static List<SingleChildWidget> get getProviders => _providers;
 }
