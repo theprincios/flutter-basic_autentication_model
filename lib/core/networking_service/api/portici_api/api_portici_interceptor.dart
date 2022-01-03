@@ -38,10 +38,10 @@ class PorticiApiInterceptors extends Interceptor {
     log('ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}');
 
     if (err.response?.statusCode == 403 || err.response?.statusCode == 401) {
-      final bool refreshTokenIsUpdate = await PorticiAutenticationProvider
+      final bool refreshtokenIsUpdated = await PorticiAutenticationProvider
           .porticiAuthenticationProvider
           .refreshToken();
-      if (refreshTokenIsUpdate) {
+      if (refreshtokenIsUpdated) {
         return await _retryRequest(err.requestOptions);
       }
     }
