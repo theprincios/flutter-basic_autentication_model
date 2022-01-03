@@ -39,7 +39,7 @@ class PorticiAutenticationProvider extends ChangeNotifier {
   Future<void> login() async {
     final loginResponse = await _porticiAuthService.login();
     if (loginResponse.item1) {
-      setAccessToken = loginResponse.item2!;
+      setAccessToken = loginResponse.item2;
       _isLogged = true;
       notifyListeners();
     }

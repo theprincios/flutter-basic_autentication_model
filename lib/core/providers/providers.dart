@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
 class MyProviders {
-  static final List<SingleChildWidget> _providers = [
+  static final List<SingleChildWidget> providers = [
     ListenableProvider<NavigatorProvider>(
       create: (context) => NavigatorProvider(),
       dispose: (context, provider) => provider.dispose(),
@@ -25,6 +25,4 @@ class MyProviders {
       dispose: (context, apiService) {},
     ),
   ];
-
-  static List<SingleChildWidget> get getProviders => _providers;
 }
