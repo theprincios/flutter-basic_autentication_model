@@ -1,11 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:project_model/core/networking_service/api/portici_api/authentication/portici_authentication_provider.dart';
 import 'package:project_model/core/networking_service/api/portici_api/provider/api_service.dart';
-import 'package:project_model/core/networking_service/api/portici_api/authentiation/portici_authentication_provider.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
   static const ValueKey keyPage = ValueKey('home_page');
+
+  Future<dynamic> getTransaction(BuildContext context) async {
+    final response =
+        await Provider.of<ApiServiceProvider>(context, listen: false)
+            .getApiPortici
+            .getTransaction();
+    if (response == null) {
+      Provider.of<PorticiAutenticationProvider>(context, listen: false)
+          .setAuth = false;
+    }
+    return response;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +46,7 @@ class HomePage extends StatelessWidget {
             ],
           ),
           body: FutureBuilder<dynamic>(
-            future: Provider.of<ApiServiceProvider>(context, listen: false)
-                .getApiPortici
-                .getTransaction(),
+            future: getTransaction(context),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 return SingleChildScrollView(

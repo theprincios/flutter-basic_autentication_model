@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:dio/dio.dart';
-import 'package:project_model/core/networking_service/api/portici_api/authentiation/portici_authentication_provider.dart';
+import 'package:project_model/core/networking_service/api/portici_api/authentication/portici_authentication_provider.dart';
 import 'package:project_model/core/networking_service/api/portici_api/provider/api_service.dart';
 
 class PorticiApiInterceptors extends Interceptor {
@@ -38,11 +38,13 @@ class PorticiApiInterceptors extends Interceptor {
     log('ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}');
 
     if (err.response?.statusCode == 403 || err.response?.statusCode == 401) {
-      final bool refreshtokenIsUpdated = await PorticiAutenticationProvider
-          .porticiAuthenticationProvider
-          .refreshToken();
-      if (refreshtokenIsUpdated) {
-        return await _retryRequest(err.requestOptions);
+      if (err.requestOptions.headers['Authorization'] != null) {
+        final bool refreshtokenIsUpdated = await PorticiAutenticationProvider
+            .porticiAuthenticationProvider
+            .refreshToken();
+        if (refreshtokenIsUpdated) {
+          return await _retryRequest(err.requestOptions);
+        }
       }
     }
 

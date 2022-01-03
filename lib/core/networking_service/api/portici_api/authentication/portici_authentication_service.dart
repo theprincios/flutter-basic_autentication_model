@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:flutter_appauth/flutter_appauth.dart';
-import 'package:project_model/core/networking_service/api/portici_api/authentiation/login_configurations.dart';
+import 'package:project_model/core/networking_service/api/portici_api/authentication/login_configurations.dart';
 import 'package:project_model/core/storage/secure_storage_configurations.dart';
 import 'package:project_model/core/storage/secure_storage_sevice.dart';
 import 'package:tuple/tuple.dart';

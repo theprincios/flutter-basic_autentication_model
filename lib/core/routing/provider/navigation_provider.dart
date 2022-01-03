@@ -5,7 +5,7 @@ import 'package:project_model/ui/pages/pages.dart';
 class NavigatorProvider extends ChangeNotifier {
   NavigatorProvider();
 
-  Pages _page = Pages.HOME;
+  Pages _page = Pages.home;
 
   Object _navigationData = {};
 
@@ -16,7 +16,7 @@ class NavigatorProvider extends ChangeNotifier {
   }
 
   void reset() {
-    _page = Pages.HOME;
+    _page = Pages.home;
     _navigationData = {};
   }
 

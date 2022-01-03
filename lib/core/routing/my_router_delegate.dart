@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:project_model/core/connectivity/provider/connectivity_status_provider.dart';
-import 'package:project_model/core/networking_service/api/portici_api/authentiation/portici_authentication_provider.dart';
+import 'package:project_model/core/networking_service/api/portici_api/authentication/portici_authentication_provider.dart';
 import 'package:project_model/core/routing/page_model.dart';
 import 'package:project_model/core/routing/provider/navigation_provider.dart';
 import 'package:project_model/ui/pages/home_page.dart';
@@ -45,7 +45,7 @@ class MyRouterDelegate extends RouterDelegate<Object> {
       bool internetConnectionAvailable) {
     List<Page> pages = [];
 
-    if (currentPage.page == Pages.HOME) {
+    if (currentPage.page == Pages.home) {
       pages.add(
         MyMaterialPage(
           child: const HomePage(),

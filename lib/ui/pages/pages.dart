@@ -1,1 +1,1 @@
-enum Pages { HOME }
+enum Pages { home }

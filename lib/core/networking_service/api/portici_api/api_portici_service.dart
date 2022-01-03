@@ -17,7 +17,8 @@ class ApiPorticiService {
   Dio get dio => _dio;
   // end inizialization
 
-  final Options options = Options(headers: {'AuthorityId': porticiApiAuthorityId});
+  final Options options =
+      Options(headers: {'AuthorityId': porticiApiAuthorityId});
 
   Future<dynamic> getTransaction(
       {Map<String, dynamic>? queryParameters}) async {
@@ -31,6 +32,7 @@ class ApiPorticiService {
       return response.data;
     } catch (e) {
       log('ERRORE GET TRANSACTION : ' + e.toString());
+      return null;
     }
   }
 }

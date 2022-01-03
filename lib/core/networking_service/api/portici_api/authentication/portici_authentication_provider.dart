@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project_model/core/networking_service/api/portici_api/authentiation/portici_authentication_service.dart';
+import 'package:project_model/core/networking_service/api/portici_api/authentication/portici_authentication_service.dart';
 import 'package:project_model/core/storage/secure_storage_configurations.dart';
 import 'package:project_model/core/storage/secure_storage_sevice.dart';
 
@@ -26,9 +26,8 @@ class PorticiAutenticationProvider extends ChangeNotifier {
       _accessToken = await _secureStorage
           .getTokenByKey(SecureStorageKeys.DATABASE_KEY_ACCESSTOKEN);
       return _accessToken;
-    } else {
-      return _accessToken;
     }
+    return _accessToken;
   }
 
   set setAccessToken(String? accessToken) => _accessToken = accessToken;
