@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
     final response =
         await Provider.of<ApiServiceProvider>(context, listen: false)
             .getApiPortici
-            .getTransaction();
+            .getWarnings();
     if (response == null) {
       Provider.of<PorticiAutenticationProvider>(context, listen: false)
           .setAuth = false;

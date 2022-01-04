@@ -23,7 +23,7 @@ class PorticiAutenticationProvider extends ChangeNotifier {
 
   Future<String?> get getAccessToken async {
     if (_accessToken == null) {
-      _accessToken = await _secureStorage
+      _accessToken = await _secureStorage.tokensSecureStorage
           .getTokenByKey(SecureStorageKeys.DATABASE_KEY_ACCESSTOKEN);
       return _accessToken;
     }
@@ -38,6 +38,7 @@ class PorticiAutenticationProvider extends ChangeNotifier {
   Future<void> login() async {
     final loginResponse = await _porticiAuthService.login();
     if (loginResponse.item1) {
+      await _porticiAuthService.saveUser();
       setAccessToken = loginResponse.item2;
       _isLogged = true;
       notifyListeners();

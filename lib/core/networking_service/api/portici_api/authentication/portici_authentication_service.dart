@@ -1,8 +1,10 @@
 import 'dart:developer';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:project_model/core/networking_service/api/portici_api/authentication/login_configurations.dart';
+import 'package:project_model/core/networking_service/api/portici_api/provider/api_service.dart';
 import 'package:project_model/core/storage/secure_storage_configurations.dart';
 import 'package:project_model/core/storage/secure_storage_sevice.dart';
+import 'package:project_model/core/user/user.dart';
 import 'package:tuple/tuple.dart';
 
 class PorticiAuthenticationService {
@@ -33,7 +35,7 @@ class PorticiAuthenticationService {
           requestLogin.refreshToken != null &&
           requestLogin.accessTokenExpirationDateTime != null &&
           requestLogin.idToken != null) {
-        await _secureStorageService.saveTokensIntoDB(
+        await _secureStorageService.tokensSecureStorage.saveTokensIntoDB(
           accessToken: requestLogin.accessToken!,
           refreshToken: requestLogin.refreshToken!,
           expiryDate: requestLogin.accessTokenExpirationDateTime!.toString(),
@@ -52,7 +54,7 @@ class PorticiAuthenticationService {
 
   Future<Tuple2<bool, String?>> refreshToken() async {
     try {
-      final refreshToken = await _secureStorageService
+      final refreshToken = await _secureStorageService.tokensSecureStorage
           .getTokenByKey(SecureStorageKeys.DATABASE_KEY_REFRESHTOKEN);
 
       if (refreshToken == null || refreshToken == '') {
@@ -76,7 +78,7 @@ class PorticiAuthenticationService {
           requestRefreshToken.refreshToken != null &&
           requestRefreshToken.accessTokenExpirationDateTime != null &&
           requestRefreshToken.idToken != null) {
-        await _secureStorageService.saveTokensIntoDB(
+        await _secureStorageService.tokensSecureStorage.saveTokensIntoDB(
           accessToken: requestRefreshToken.accessToken!,
           refreshToken: requestRefreshToken.refreshToken!,
           expiryDate:
@@ -97,12 +99,29 @@ class PorticiAuthenticationService {
 
   Future<bool> logout() async {
     try {
-      await _secureStorageService.clearALLtokensIntoDB();
+      await _secureStorageService.tokensSecureStorage.clearALLtokensIntoDB();
 
       return true;
     } catch (e) {
       log('ERRORE LOGOUT - PORTICI AUTENTICATION SERVICE - $e');
       return false;
+    }
+  }
+
+  Future<void> saveUser() async {
+    try {
+      final responseMyProfile = await ApiServiceProvider
+          .apiServiceProvider.getApiPortici
+          .getMyProfile();
+      if (responseMyProfile == null) {
+        throw Exception('getMyProfile nessun risultato');
+      } else {
+        final User userData = User.fromJson(responseMyProfile);
+        await _secureStorageService.userSecureStorage
+            .writeUserIntoSecureStorage(userData);
+      }
+    } catch (e) {
+      log('ERRORE (saveUser) - $e');
     }
   }
 }

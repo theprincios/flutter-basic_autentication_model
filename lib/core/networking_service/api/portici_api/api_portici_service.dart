@@ -20,8 +20,21 @@ class ApiPorticiService {
   final Options options =
       Options(headers: {'AuthorityId': porticiApiAuthorityId});
 
-  Future<dynamic> getTransaction(
-      {Map<String, dynamic>? queryParameters}) async {
+  Future<dynamic> getMyProfile() async {
+    try {
+      final response = await dio.get<dynamic>(
+        '$_baseUrl/v1/users/my/profile',
+        options: options,
+      );
+
+      return response.data;
+    } catch (e) {
+      log('ERRORE GET MY_PROFILE : ' + e.toString());
+      return null;
+    }
+  }
+
+  Future<dynamic> getWarnings({Map<String, dynamic>? queryParameters}) async {
     try {
       final response = await dio.get<dynamic>(
         '$_baseUrl/v1/warnings',

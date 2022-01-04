@@ -7,4 +7,6 @@ class SecureStorageKeys {
   static const DATABASE_KEY_IDTOKEN = 'id_token_potici_login';
   // ignore: constant_identifier_names
   static const DATABASE_KEY_EXPIRYDATE = 'expiry_date_portici_login';
+  // ignore: constant_identifier_names
+  static const DATABASE_KEY_USERDATA = 'user_data_portici_login';
 }
